@@ -18,3 +18,10 @@ https://emmauscollege.github.io/informatica/game/
 - icon <br>
         http://www.iconarchive.com/show/android-lollipop-icons-by-dtafalonso/Play-Games-icon.html
 - ...
+
+Snake maken
+
+deel 1: werkende code maken om te kunnen bewegen.
+deel 2: (eten) voor de snake coderen zodat het (eten) random een plek genereerd nadat het vorige (eten) is gepakt.
+deel 3: game menu maken 
+//verschillende vaardigheden???
