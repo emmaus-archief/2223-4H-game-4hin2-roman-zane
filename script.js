@@ -80,7 +80,7 @@ var verwerkBotsing = function() {
  */
 var tekenAlles = function() {
   // achtergrond
-  fill("black")
+  fill("green")
   rect(0,0,1280,720)
   // vijand
 
@@ -129,7 +129,7 @@ function setup() {
   createCanvas(1280, 720);
 
   // Kleur de achtergrond blauw, zodat je het kunt zien
-  background('black');
+  background('green');
 }
 
 /**
