@@ -27,6 +27,8 @@ const KEY_DOWN = 40;
 
 var spelerX = 600; // x-positie van speler
 var spelerY = 600; // y-positie van speler
+var speedX = 0;
+
 
  //plaatje
 /* ********************************************* */
@@ -38,6 +40,7 @@ var spelerY = 600; // y-positie van speler
  */
 var beweegAlles = function() {
   // speler
+  /*
   if (keyIsDown(KEY_LEFT))  {
   spelerX = spelerX - 5; }
 
@@ -49,12 +52,11 @@ var beweegAlles = function() {
 
   else if (keyIsDown(KEY_DOWN))  {
   spelerY = spelerY + 5; }
+*/
+   if (keyIsDown(KEY_RIGHT))  {
+  speedX = 5; }
 
-
-  
-  
-  
-    
+  spelerX= spelerX + speedX;
   // vijand
 
   // kogel
