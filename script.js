@@ -28,7 +28,7 @@ const KEY_DOWN = 40;
 var spelerX = 600; // x-positie van speler
 var spelerY = 600; // y-positie van speler
 var speedX = 0;
-
+var speedY = 0;
 
  //plaatje
 /* ********************************************* */
@@ -40,24 +40,26 @@ var speedX = 0;
  */
 var beweegAlles = function() {
   // speler
-  /*
+  
   if (keyIsDown(KEY_LEFT))  {
-  spelerX = spelerX - 5; }
+  speedX = -5; }
 
   else if (keyIsDown(KEY_RIGHT))  {
-  spelerX = spelerX + 5; }
-
-  else if (keyIsDown(KEY_UP))  {
-  spelerY = spelerY - 5; }
-
-  else if (keyIsDown(KEY_DOWN))  {
-  spelerY = spelerY + 5; }
-*/
-   if (keyIsDown(KEY_RIGHT))  {
   speedX = 5; }
 
-  spelerX= spelerX + speedX;
+  else if (keyIsDown(KEY_UP))  {
+  spelerY = speedY = 5; }
+
+  else if (keyIsDown(KEY_DOWN))  {
+  spelerY = speedY = 5; }
+
+spelerX = spelerX+speedX;
+ 
+  
+
+  
   // vijand
+  
 
   // kogel
 };
