@@ -17,20 +17,20 @@
 /* ********************************************* */
 /* globale variabelen die je gebruikt in je game */
 /* ********************************************* */
+
 const SPELEN = 1;
 const GAMEOVER = 2;
-var spelStatus = SPELEN;
-const KEY_LEFT = 37;
-const KEY_RIGHT = 39;
-const KEY_UP = 38;
-const KEY_DOWN = 40;
 
+const BLOCK_SIZE = 10
+const SPEED = 10
+
+var spelStatus = SPELEN;
 var spelerX = 600; // x-positie van speler
 var spelerY = 600; // y-positie van speler
 var speedX = 0;
 var speedY = 0;
 
- //plaatje
+//plaatje
 /* ********************************************* */
 /* functies die je gebruikt in je game           */
 /* ********************************************* */
@@ -40,30 +40,42 @@ var speedY = 0;
  */
 var beweegAlles = function() {
   // speler
+
+  if (keyIsDown(65)) { // A
+    speedX = -5;
+    speedY = 0;
+  }
+  else if (keyIsDown(68)) { // D
+    speedX = 5;
+    speedY = 0;
+  }
+  else if (keyIsDown(87)) { // W
+    speedY = -5;
+    speedX = 0;
+  }
+  else if (keyIsDown(83)) { // S
+    speedY = 5;
+    speedX = 0;
+  }
+
+  spelerX = spelerX + speedX;
+  spelerY = spelerY + speedY;
+
+  if (spelerX < 0) {
+    spelerX = 0;
+  };
+
+
   
-  if (keyIsDown(KEY_LEFT))  {
-  speedX = -5; }
 
-  else if (keyIsDown(KEY_RIGHT))  {
-  speedX = 5; }
 
-  else if (keyIsDown(KEY_UP))  {
-  spelerY = speedY = 5; }
 
-  else if (keyIsDown(KEY_DOWN))  {
-  spelerY = speedY = 5; }
+// vijand
 
-spelerX = spelerX+speedX;
- 
-  
 
-  
-  // vijand
-  
+// kogel
 
-  // kogel
-};
-  
+
 
 /**
  * Checkt botsingen
@@ -85,7 +97,7 @@ var verwerkBotsing = function() {
 var tekenAlles = function() {
   // achtergrond
   fill("green")
-  rect(0,0,1280,720)
+  rect(0, 0, 1280, 720)
   // vijand
 
   // kogel
@@ -109,6 +121,14 @@ var checkGameOver = function() {
   return false;
 };
 
+function gameLoop() {
+  ClearCanvas();
+  drawAppple();
+  moveSnake();
+  collisionDetection();
+  drawSnake();
+}
+
 /* ********************************************* */
 /* setup() en draw() functies / hoofdprogramma   */
 /* ********************************************* */
@@ -120,8 +140,10 @@ var checkGameOver = function() {
  */
 
 function preload() {
-  img = loadImage('achtergrond.png');
+  img = loadImage('appel.jpg')
 }
+
+
 
 /**
  * setup
@@ -130,7 +152,7 @@ function preload() {
  */
 function setup() {
   // Maak een canvas (rechthoek) waarin je je speelveld kunt tekenen
-  createCanvas(1280, 720);
+  createCanvas(1200, 630);
 
   // Kleur de achtergrond blauw, zodat je het kunt zien
   background('green');
@@ -152,6 +174,4 @@ function draw() {
   }
   if (spelStatus === GAMEOVER) {
     // teken game-over scherm
-
-  }
 }
