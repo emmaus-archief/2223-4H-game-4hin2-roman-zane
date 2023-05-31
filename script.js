@@ -63,9 +63,7 @@ var beweegAlles = function() {
   spelerX = spelerX + speedX;
   spelerY = spelerY + speedY;
 
-  if (spelerX < 0) {
-    spelerX = 0;
-  };
+
 
 
 
@@ -119,6 +117,22 @@ var tekenAlles = function() {
  * anders return false
  */
 var checkGameOver = function() {
+  if (spelerX < 0) {
+    return true;
+  }
+
+  if (spelerX > 0) {
+    return true;
+  }
+
+  if (spelerY < 0) {
+    return true;
+  }
+
+  if (spelerY > 0) {
+  return true;
+  }
+
   // check of HP 0 is , of tijd op is, of ...
   return false;
 };
@@ -175,6 +189,17 @@ function draw() {
     }
   }
   if (spelStatus === GAMEOVER) {
+    fill("red");
+    textSize(50);
+    text("GAME OVER", 450, 300);
+    
+    if (keyIsDown(49)) {
+      
+      //geef speler nieuwe waarde
+      //geef andere variabelen nieuwe waarde
+      spelStatus = SPELEN;
+    }
+
     // teken game-over scherm
   }
 }
