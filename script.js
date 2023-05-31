@@ -30,6 +30,8 @@ var spelerY = 600; // y-positie van speler
 var speedX = 0;
 var speedY = 0;
 
+var img;
+
 //plaatje
 /* ********************************************* */
 /* functies die je gebruikt in je game           */
@@ -66,16 +68,16 @@ var beweegAlles = function() {
   };
 
 
-  
 
 
 
-// vijand
+
+  // vijand
 
 
-// kogel
+  // kogel
 
-
+}
 
 /**
  * Checkt botsingen
@@ -174,4 +176,5 @@ function draw() {
   }
   if (spelStatus === GAMEOVER) {
     // teken game-over scherm
+  }
 }
