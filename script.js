@@ -1,135 +1,209 @@
-"use strict";
+/* Game opdracht
+   Informatica - Emmauscollege Rotterdam
+   Template voor een game in JavaScript met de p5 library
 
-const BLOCK_SIZE = 20;
-const SPEED = 1;
+   Begin met dit template voor je game opdracht,
+   voeg er je eigen code aan toe.
+ */
 
-var snake = [];
-var food = { x: 0, y: 0 };
-var direction = "right";
-var gameStatus = "play";
+/*
+ * instellingen om foutcontrole van je code beter te maken 
+ */
+///<reference path="p5.global-mode.d.ts" />
+"use strict"
 
-function setup() {
-  createCanvas(800, 600);
-  frameRate(10);
-  resetGame();
-}
+/* ********************************************* */
+/* globale variabelen die je gebruikt in je game */
+/* ********************************************* */
 
-function draw() {
-  background(0);
+const SPELEN = 1;
+const GAMEOVER = 2;
 
-  if (gameStatus === "play") {
-    moveSnake();
-    checkCollision();
-    drawSnake();
-    drawFood();
-  } else if (gameStatus === "gameOver") {
-    fill(255);
-    textSize(50);
-    textAlign(CENTER);
-    text("GAME OVER", width / 2, height / 2);
+const BLOCK_SIZE = 50
+const SPEED = 5
+
+
+var spelStatus = SPELEN;
+var spelerX = 600; // x-positie van speler
+var spelerY = 600; // y-positie van speler
+var speedX = 0;
+var speedY = 0;
+
+
+var img;
+
+//plaatje
+/* ********************************************* */
+/* functies die je gebruikt in je game           */
+/* ********************************************* */
+
+/**
+ * Updatet globale variabelen met posities van speler, vijanden en kogels
+ */
+var beweegAlles = function() {
+  // speler
+
+  if (keyIsDown(65)) { // A
+    speedX = -5;
+    speedY = 0;
   }
-}
-
-function resetGame() {
-  snake = [];
-  snake.push(createVector(width / 2, height / 2));
-  direction = "right";
-  placeFood();
-  gameStatus = "play";
-}
-
-function moveSnake() {
-  var head = snake[0].copy();
-
-  if (direction === "right") {
-    head.x += BLOCK_SIZE;
-  } else if (direction === "left") {
-    head.x -= BLOCK_SIZE;
-  } else if (direction === "up") {
-    head.y -= BLOCK_SIZE;
-  } else if (direction === "down") {
-    head.y += BLOCK_SIZE;
+  else if (keyIsDown(68)) { // D
+    speedX = 5;
+    speedY = 0;
+  }
+  else if (keyIsDown(87)) { // W
+    speedY = -5;
+    speedX = 0;
+  }
+  else if (keyIsDown(83)) { // S
+    speedY = 5;
+    speedX = 0;
   }
 
-  snake.unshift(head);
+  spelerX = spelerX + speedX;
+  spelerY = spelerY + speedY;
 
-  if (!isFoodEaten()) {
-    snake.pop();
-  }
+
+
+
+
+
+
+
+  // vijand
+
+
+  // kogel
+
 }
 
-function isFoodEaten() {
-  if (snake[0].x === food.x && snake[0].y === food.y) {
-    placeFood();
+/**
+ * Checkt botsingen
+ * Verwijdert neergeschoten dingen
+ * Updatet globale variabelen punten en health
+ */
+var verwerkBotsing = function() {
+  // botsing speler tegen vijand
+
+  // botsing kogel tegen vijand
+
+  // update punten en health
+
+};
+
+/**
+ * Tekent spelscherm
+ */
+var tekenAlles = function() {
+  // achtergrond
+  fill("green")
+  rect(0, 0, 1280, 720)
+  // vijand
+
+  // kogel
+
+  // speler
+  fill("white");
+  rect(spelerX - 25, spelerY - 25, 50, 50);
+  fill("black");
+  ellipse(spelerX, spelerY, 10, 10);
+
+  // punten en health
+
+};
+
+/**
+ * return true als het gameover is
+ * anders return false
+ */
+var checkGameOver = function() {
+  if (spelerX < 0) {
     return true;
   }
+
+  if (spelerX > 0) {
+    return true;
+  }
+
+  if (spelerY < 0) {
+    return true;
+  }
+
+  if (spelerY > 0) {
+  return true;
+  }
+
+  // check of HP 0 is , of tijd op is, of ...
   return false;
+};
+
+function gameLoop() {
+  ClearCanvas();
+  drawAppple();
+  moveSnake();
+  collisionDetection();
+  drawSnake();
 }
 
-function checkCollision() {
-  var head = snake[0];
+/* ********************************************* */
+/* setup() en draw() functies / hoofdprogramma   */
+/* ********************************************* */
 
-  if (
-    head.x < 0 ||
-    head.x >= width ||
-    head.y < 0 ||
-    head.y >= height ||
-    isSnakeCollision()
-  ) {
-    gameStatus = "gameOver";
+/**
+ * preload
+ * deze functie wordt 1x uitgevoerd voor de setup
+ * we laden hier de plaatjes
+ */
+
+function preload() {
+  img = loadImage('appel.jpg')
+}
+
+
+
+/**
+ * setup
+ * de code in deze functie wordt één keer uitgevoerd door
+ * de p5 library, zodra het spel geladen is in de browser
+ */
+function setup() {
+  // Maak een canvas (rechthoek) waarin je je speelveld kunt tekenen
+  createCanvas(1200, 630);
+
+  // Kleur de achtergrond blauw, zodat je het kunt zien
+  background('green');
+}
+
+/**
+ * draw
+ * de code in deze functie wordt 50 keer per seconde
+ * uitgevoerd door de p5 library, nadat de setup functie klaar is
+ */
+function draw() {
+  if (spelStatus === SPELEN) {
+    beweegAlles();
+    verwerkBotsing();
+    tekenAlles();
   }
+    //if (checkGameOver()) {
+    //  spelStatus = GAMEOVER;
+  //}
+
+    else if (spelerX < 0) { 
+       zane();
+      //spelerY = 600;
+  }
+
 }
 
-function isSnakeCollision() {
-  var head = snake[0];
+  function zane(){
 
-  for (var i = 1; i < snake.length; i++) {
-    if (head.x === snake[i].x && head.y === snake[i].y) {
-      return true;
+    if (spelStatus === GAMEOVER) {
+    fill("red");
+    textSize(50);
+    text("GAME OVER", 450, 300);
+
+    //spelStatus = SPELEN
     }
-  }
-
-  return false;
 }
 
-function drawSnake() {
-  for (var i = 0; i < snake.length; i++) {
-    fill(255);
-    rect(snake[i].x, snake[i].y, BLOCK_SIZE, BLOCK_SIZE);
-  }
-}
-
-function drawFood() {
-  fill(255, 0, 0);
-  rect(food.x, food.y, BLOCK_SIZE, BLOCK_SIZE);
-}
-
-function placeFood() {
-  var cols = floor(width / BLOCK_SIZE);
-  var rows = floor(height / BLOCK_SIZE);
-  food = createVector(
-    floor(random(cols)) * BLOCK_SIZE,
-    floor(random(rows)) * BLOCK_SIZE
-  );
-
-  for (var i = 0; i < snake.length; i++) {
-    if (food.x === snake[i].x && food.y === snake[i].y) {
-      placeFood();
-      break;
-    }
-  }
-}
-
-function keyPressed() {
-  if (keyCode === RIGHT_ARROW && direction !== "left") {
-    direction = "right";
-  } else if (keyCode === LEFT_ARROW && direction !== "right") {
-    direction = "left";
-  } else if (keyCode === UP_ARROW && direction !== "down") {
-    direction = "up";
-  } else if (keyCode === DOWN_ARROW && direction !== "up") {
-    direction = "down";
-  } else if (keyCode === ENTER && gameStatus === "gameOver") {
-    resetGame();
-  }
-}
