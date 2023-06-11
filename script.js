@@ -1,4 +1,4 @@
-/* Game opdracht
+ /* Game opdracht
    Informatica - Emmauscollege Rotterdam
    Template voor een game in JavaScript met de p5 library
 
@@ -10,200 +10,149 @@
  * instellingen om foutcontrole van je code beter te maken 
  */
 ///<reference path="p5.global-mode.d.ts" />
-"use strict"
+//"use strict"
 
 /* ********************************************* */
 /* globale variabelen die je gebruikt in je game */
 /* ********************************************* */
 
-const SPELEN = 1;
-const GAMEOVER = 2;
+// SNAKE GAME 
 
-const BLOCK_SIZE = 50
-const SPEED = 5
-
-
-var spelStatus = SPELEN;
-var spelerX = 600; // x-positie van speler
-var spelerY = 600; // y-positie van speler
-var speedX = 0;
-var speedY = 0;
-
-
-var img;
-
-//plaatje
-/* ********************************************* */
-/* functies die je gebruikt in je game           */
-/* ********************************************* */
-
-/**
- * Updatet globale variabelen met posities van speler, vijanden en kogels
- */
-var beweegAlles = function() {
-  // speler
-
-  if (keyIsDown(65)) { // A
-    speedX = -5;
-    speedY = 0;
-  }
-  else if (keyIsDown(68)) { // D
-    speedX = 5;
-    speedY = 0;
-  }
-  else if (keyIsDown(87)) { // W
-    speedY = -5;
-    speedX = 0;
-  }
-  else if (keyIsDown(83)) { // S
-    speedY = 5;
-    speedX = 0;
-  }
-
-  spelerX = spelerX + speedX;
-  spelerY = spelerY + speedY;
+// Canvas
+const canvas = document.createElement('canvas');
+const ctx = canvas.getContext('2d');
+document.body.appendChild(canvas);
+canvas.width = 400;
+canvas.height = 400;
 
 
 
+const gridSize = 20;
+const tileCount = canvas.width / gridSize;
+let snake = [{ x: 100, y: 100 }];
+let dx = gridSize;
+let dy = 0;
+let food = { x: gridSize * 5, y: gridSize * 5 };
+let score = 0;
 
-
-
-
-
-  // vijand
-
-
-  // kogel
-
-}
-
-/**
- * Checkt botsingen
- * Verwijdert neergeschoten dingen
- * Updatet globale variabelen punten en health
- */
-var verwerkBotsing = function() {
-  // botsing speler tegen vijand
-
-  // botsing kogel tegen vijand
-
-  // update punten en health
-
-};
-
-/**
- * Tekent spelscherm
- */
-var tekenAlles = function() {
-  // achtergrond
-  fill("green")
-  rect(0, 0, 1280, 720)
-  // vijand
-
-  // kogel
-
-  // speler
-  fill("white");
-  rect(spelerX - 25, spelerY - 25, 50, 50);
-  fill("black");
-  ellipse(spelerX, spelerY, 10, 10);
-
-  // punten en health
-
-};
-
-/**
- * return true als het gameover is
- * anders return false
- */
-var checkGameOver = function() {
-  if (spelerX < 0) {
-    return true;
-  }
-
-  if (spelerX > 0) {
-    return true;
-  }
-
-  if (spelerY < 0) {
-    return true;
-  }
-
-  if (spelerY > 0) {
-  return true;
-  }
-
-  // check of HP 0 is , of tijd op is, of ...
-  return false;
-};
 
 function gameLoop() {
-  ClearCanvas();
-  drawAppple();
+  clearCanvas();
   moveSnake();
-  collisionDetection();
   drawSnake();
-}
+  drawFood();
+  drawScore();
 
-/* ********************************************* */
-/* setup() en draw() functies / hoofdprogramma   */
-/* ********************************************* */
-
-/**
- * preload
- * deze functie wordt 1x uitgevoerd voor de setup
- * we laden hier de plaatjes
- */
-
-function preload() {
-  img = loadImage('appel.jpg')
-}
-
-
-
-/**
- * setup
- * de code in deze functie wordt één keer uitgevoerd door
- * de p5 library, zodra het spel geladen is in de browser
- */
-function setup() {
-  // Maak een canvas (rechthoek) waarin je je speelveld kunt tekenen
-  createCanvas(1200, 630);
-
-  // Kleur de achtergrond blauw, zodat je het kunt zien
-  background('green');
-}
-
-/**
- * draw
- * de code in deze functie wordt 50 keer per seconde
- * uitgevoerd door de p5 library, nadat de setup functie klaar is
- */
-function draw() {
-  if (spelStatus === SPELEN) {
-    beweegAlles();
-    verwerkBotsing();
-    tekenAlles();
-  }
-    //if (checkGameOver()) {
-    //  spelStatus = GAMEOVER;
-  //}
-
-    else if (spelerX < 0) { 
-       zane();
-      //spelerY = 600;
+  if (isGameOver()) {
+    endGame();
+    return;
   }
 
+  setTimeout(gameLoop, 100);
 }
 
-  function zane(){
 
-    if (spelStatus === GAMEOVER) {
-    fill("red");
-    textSize(50);
-    text("GAME OVER", 450, 300);
+function clearCanvas() {
+  ctx.fillStyle = 'black';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+}
 
-    //spelStatus = SPELEN
+// snake laten bewegen
+function moveSnake() {
+  const head = { x: snake[0].x + dx, y: snake[0].y + dy };
+  snake.unshift(head);
+
+  // controleerd of de snake het eten heeft gegeten
+  if (head.x === food.x && head.y === food.y) {
+    generateFood();
+    score++;
+  } else {
+    snake.pop();
+  }
+}
+
+// tekent snake 
+function drawSnake() {
+  snake.forEach(segment => {
+    ctx.fillStyle = 'green';
+    ctx.fillRect(segment.x, segment.y, gridSize, gridSize);
+  });
+}
+
+// spawnt het eten op een random plek
+function generateFood() {
+  const maxPos = tileCount - 1;
+  food = {
+    x: Math.floor(Math.random() * maxPos) * gridSize,
+    y: Math.floor(Math.random() * maxPos) * gridSize
+  };
+}
+
+
+//tekent het eten
+function drawFood() {
+  ctx.fillStyle = 'red';
+  ctx.fillRect(food.x, food.y, gridSize, gridSize);
+}
+
+//score
+function drawScore() {
+  ctx.fillStyle = 'white';
+  ctx.font = '20px Arial';
+  ctx.fillText('Score: ' + score, 10, 25);
+}
+
+// CheckGameOver
+function isGameOver() {
+  const head = snake[0];
+
+  // Checkt of de snake tegen de muur aangaat
+  if (
+    head.x < 0 ||
+    head.x >= canvas.width ||
+    head.y < 0 ||
+    head.y >= canvas.height
+  ) {
+    return true;
+  }
+
+  // Checkt of de snake tegen zich zelf aankomt
+  for (let i = 1; i < snake.length; i++) {
+    if (head.x === snake[i].x && head.y === snake[i].y) {
+      return true;
     }
+  }
+
+  return false;
 }
 
+// Game over
+function endGame() {
+  ctx.fillStyle = 'white';
+  ctx.font = '30px Arial';
+  ctx.fillText('Game Over', 120, canvas.height / 2);
+}
+
+
+document.addEventListener('keydown', handleArrowKeys);
+
+function handleArrowKeys(event) {
+  const key = event.key;
+  if (key === 'ArrowUp' && dy !== gridSize) {
+    dx = 0; // pijltje omhoog
+    dy = -gridSize;
+  } else if (key === 'ArrowDown' && dy !== -gridSize) {
+    dx = 0; // pijltje omlaag
+    dy = gridSize;
+  } else if (key === 'ArrowLeft' && dx !== gridSize) {
+    dx = -gridSize;// pijltje naar links
+    dy = 0;
+  } else if (key === 'ArrowRight' && dx !== -gridSize) {
+    dx = gridSize;// pijltje naar rechts
+    dy = 0;
+  }
+}
+
+// Start het spel
+gameLoop();
+generateFood();
